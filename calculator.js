@@ -6,7 +6,7 @@ class FinancialCalculator extends HTMLElement {
 
     const style = document.createElement("style");
     style.textContent = `
-      /* Общие стили для контейнера */
+      
       .calculator-container {
         max-width: 400px;
         margin: 0 auto;
@@ -18,13 +18,13 @@ class FinancialCalculator extends HTMLElement {
         background-color: #f9f9f9;
       }
 
-      /* Стили для заголовка */
+    
       h2 {
         margin-top: 0;
         color: #333;
       }
 
-      /* Стили для элементов формы */
+     
       label {
         display: block;
         margin-bottom: 10px;
@@ -59,7 +59,7 @@ class FinancialCalculator extends HTMLElement {
         margin: 5px 0;
       }
 
-      /* Стили для результатов */
+     
       #results span {
         font-weight: bold;
         color: #007bff;
