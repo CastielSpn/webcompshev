@@ -3,10 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>Финансовый калькулятор</title>
-  <script src="calculator.js" defer></script>
+  <style>
+    
+    financial-calculator {
+      display: block;
+      width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #results {
+      margin-top: 20px;
+    }
+    #results p {
+      margin-bottom: 5px;
+    }
+    #results strong {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1>Шевченко 3Р2</h1>
+
   <financial-calculator></financial-calculator>
+
+  <script src="calculator.js"></script>
 </body>
 </html>
