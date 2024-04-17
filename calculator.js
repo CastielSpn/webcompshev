@@ -1,105 +1,70 @@
 class FinancialCalculator extends HTMLElement {
   constructor() {
     super();
-
-    const shadow = this.attachShadow({ mode: "open" });
-
-    const style = document.createElement("style");
-    style.textContent = `
-      
-      .calculator-container {
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-      }
-
-    
-      h2 {
-        margin-top: 0;
-        color: #333;
-      }
-
-     
-      label {
-        display: block;
-        margin-bottom: 10px;
-      }
-
-      input[type="number"] {
-        width: 100%;
-        padding: 8px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-      }
-
-      button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-top: 10px;
-      }
-
-      #results {
-        margin-top: 20px;
-        border-top: 1px solid #ccc;
-        padding-top: 10px;
-      }
-
-      #results p {
-        margin: 5px 0;
-      }
-
-     
-      #results span {
-        font-weight: bold;
-        color: #007bff;
-      }
-    `;
-    shadow.appendChild(style);
-
-    const container = document.createElement("div");
-    container.classList.add("calculator-container");
-    container.innerHTML = `
-      <h2>Финансовый калькулятор</h2>
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = `
+      <style>
+       
+        form {
+          margin-bottom: 20px;
+        }
+        label {
+          display: block;
+          margin-bottom: 5px;
+        }
+        input {
+          width: 100%;
+          padding: 8px;
+          margin-bottom: 10px;
+          box-sizing: border-box;
+        }
+        button {
+          padding: 10px 20px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+        button:hover {
+          background-color: #0056b3;
+        }
+        #results {
+          margin-top: 20px;
+        }
+        #results p {
+          margin-bottom: 5px;
+        }
+        #results strong {
+          font-weight: bold;
+        }
+      </style>
       <form id="calculator-form">
         <label for="loan-amount">Сумма кредита:</label>
-        <input type="number" id="loan-amount" name="loan-amount" required><br><br>
+        <input type="number" id="loan-amount" required><br><br>
         
         <label for="interest-rate">Процентная ставка (%):</label>
-        <input type="number" id="interest-rate" name="interest-rate" required><br><br>
+        <input type="number" id="interest-rate" required><br><br>
         
-        <label for="loan-term">Срок кредита (в месяцах):</label>
-        <input type="number" id="loan-term" name="loan-term" required><br><br>
+        <label for="loan-term">Срок кредита (месяцы):</label>
+        <input type="number" id="loan-term" required><br><br>
         
-        <button type="submit">Рассчитать</button>
+        <button type="button" id="calculate-button">Рассчитать</button>
       </form>
+      
       <div id="results">
-        <p>Ежемесячный платеж: <span id="monthly-payment"></span></p>
-        <p>Общая сумма: <span id="total-amount"></span></p>
-        <p>Общий процент: <span id="total-interest"></span></p>
+        <p><strong>Ежемесячный платеж:</strong> <span id="monthly-payment"></span></p>
+        <p><strong>Общая сумма к оплате:</strong> <span id="total-amount"></span></p>
+        <p><strong>Общий процент по кредиту:</strong> <span id="total-interest"></span></p>
       </div>
     `;
-    shadow.appendChild(container);
 
-    const form = shadow.getElementById("calculator-form");
-    form.addEventListener("submit", this.calculate.bind(this));
-
-    console.log("Компонент создан");
+    this.shadowRoot.getElementById("calculate-button").addEventListener("click", () => {
+      this.calculate();
+    });
   }
 
-  calculate(event) {
-    event.preventDefault();
-
+  calculate() {
     const loanAmount = parseFloat(this.shadowRoot.getElementById("loan-amount").value);
     const interestRate = parseFloat(this.shadowRoot.getElementById("interest-rate").value);
     const loanTerm = parseInt(this.shadowRoot.getElementById("loan-term").value);
@@ -111,8 +76,8 @@ class FinancialCalculator extends HTMLElement {
 
     const monthlyInterestRate = interestRate / 100 / 12;
     const totalPayments = loanTerm;
-    const denominator = Math.pow(1 + monthlyInterestRate, totalPayments) - 1;
-    const monthlyPayment = (loanAmount * monthlyInterestRate) / denominator;
+    const monthlyPayment = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalPayments)) /
+      (Math.pow(1 + monthlyInterestRate, totalPayments) - 1);
     const totalAmount = monthlyPayment * totalPayments;
     const totalInterest = totalAmount - loanAmount;
 
@@ -124,23 +89,19 @@ class FinancialCalculator extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("Компонент добавлен в DOM");
+    console.log("Компонент создан");
   }
 
   disconnectedCallback() {
-    console.log("Компонент удален из DOM");
-  }
-
-  adoptedCallback() {
-    console.log("Компонент перемещен в другое место в DOM");
+    console.log("Компонент удален");
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Атрибут ${name} был изменен`);
+    console.log(`Атрибут ${name} изменен с ${oldValue} на ${newValue}`);
   }
 
   static get observedAttributes() {
-    return ["example-attribute"];
+    return ["loan-amount", "interest-rate", "loan-term"];
   }
 }
 
